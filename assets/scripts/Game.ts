@@ -18,10 +18,23 @@ export default class NewClass extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    onLoad () {
+        this.init()
+
+    }
 
     start () {
+    }
 
+    init(){
+        let physicsManager = cc.director.getPhysicsManager();
+        physicsManager.enabled = true
+
+        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
+        //     cc.PhysicsManager.DrawBits.e_pairBit |
+        //     cc.PhysicsManager.DrawBits.e_centerOfMassBit |
+        //     cc.PhysicsManager.DrawBits.e_joinBit |
+        //     cc.PhysicsManager.DrawBits.e_shapeBit;
     }
 
     // update (dt) {}
