@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "platform",
+    "_name": "stick",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -46,7 +46,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 50,
-      "height": 350
+      "height": 150
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -161,21 +161,19 @@
     "_size": {
       "__type__": "cc.Size",
       "width": 50,
-      "height": 350
+      "height": 150
     },
     "_id": ""
   },
   {
-    "__type__": "2d19daRncxJhLO9qiAGnK+Y",
+    "__type__": "d4ed1RzxahOfpTZ2ZAaShoH",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "stick": {
-      "__uuid__": "72f76ac7-c20d-4aa6-8e1f-438af1b4e560"
-    },
+    "stickWidth": 10,
     "_id": ""
   },
   {

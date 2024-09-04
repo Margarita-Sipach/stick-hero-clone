@@ -75,22 +75,22 @@
         "__id__": 5
       },
       {
-        "__id__": 9
+        "__id__": 10
       },
       {
-        "__id__": 11
+        "__id__": 12
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 13
-      },
-      {
         "__id__": 14
       },
       {
         "__id__": 15
+      },
+      {
+        "__id__": 16
       }
     ],
     "_prefab": null,
@@ -253,6 +253,9 @@
       },
       {
         "__id__": 8
+      },
+      {
+        "__id__": 9
       }
     ],
     "_prefab": null,
@@ -278,8 +281,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        76.125,
-        83.731,
+        -461.162,
+        -110.448,
         0,
         0,
         0,
@@ -387,6 +390,18 @@
     "_id": "1cN2fW1jFAv7imKxOeIdSw"
   },
   {
+    "__type__": "db4509lv+dNiKi+eEoWgXX2",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 5
+    },
+    "_enabled": true,
+    "label": null,
+    "text": "hello",
+    "_id": "1eFn/Ep0dK0Zd+k/MoggmL"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "platforms",
     "_objFlags": 0,
@@ -397,7 +412,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 10
+        "__id__": 11
       }
     ],
     "_prefab": null,
@@ -453,11 +468,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 9
+      "__id__": 10
     },
     "_enabled": true,
     "platformWidthMin": 50,
-    "platformWidthMax": 500,
+    "platformWidthMax": 400,
     "xOffsetMin": 60,
     "xOffsetMax": 200,
     "platform": {
@@ -476,7 +491,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 12
+        "__id__": 13
       }
     ],
     "_prefab": null,
@@ -532,7 +547,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 11
+      "__id__": 12
     },
     "_enabled": true,
     "_cullingMask": 4294967295,
@@ -615,7 +630,9 @@
       "__id__": 2
     },
     "_enabled": true,
-    "label": null,
+    "hero": {
+      "__id__": 5
+    },
     "text": "hello",
     "_id": "11Lro5Cb9MIqU91yGkdnT9"
   }
