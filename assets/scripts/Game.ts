@@ -15,8 +15,8 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     hero: cc.Node = null;
 
-    @property
-    text: string = 'hello';
+    @property(cc.Label)
+    scoreLabel: cc.Label;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -25,6 +25,7 @@ export default class NewClass extends cc.Component {
     }
 
     start () {
+        
     }
 
     init(){
@@ -34,11 +35,11 @@ export default class NewClass extends cc.Component {
         let collisionManager = cc.director.getCollisionManager();
         collisionManager.enabled = true
 
-        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
-        //     cc.PhysicsManager.DrawBits.e_pairBit |
-        //     cc.PhysicsManager.DrawBits.e_centerOfMassBit |
-        //     cc.PhysicsManager.DrawBits.e_joinBit |
-        //     cc.PhysicsManager.DrawBits.e_shapeBit;
+        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
+            cc.PhysicsManager.DrawBits.e_pairBit |
+            cc.PhysicsManager.DrawBits.e_centerOfMassBit |
+            cc.PhysicsManager.DrawBits.e_joinBit |
+            cc.PhysicsManager.DrawBits.e_shapeBit;
 
         this.node.on(cc.Node.EventType.TOUCH_START, () => {
             globals.isTouching = true
@@ -50,5 +51,7 @@ export default class NewClass extends cc.Component {
         })
     }
 
-    // update (dt) {}
+    update (dt) {
+        this.scoreLabel.string = `Score:\n${globals.score}`;
+    }
 }

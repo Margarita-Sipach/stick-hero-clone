@@ -22,7 +22,7 @@ export default class NewClass extends cc.Component {
     platformWidthMin: number = 50;
 
     @property
-    platformWidthMax: number = 500;
+    platformWidthMax: number = 200;
 
     @property
     xOffsetMin: number = 60;
@@ -40,6 +40,7 @@ export default class NewClass extends cc.Component {
     
     screenRight = cc.winSize.width / 2
     screenLeft = -cc.winSize.width / 2
+    screenWidth = cc.winSize.width
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -55,6 +56,7 @@ export default class NewClass extends cc.Component {
 
         this.createPlatform()
         this.platformFrom.init(500, this.screenLeft)
+        this.platformTo.init(200, 0)
     }
 
     createPlatform(baseData?: Platform){
@@ -81,10 +83,13 @@ export default class NewClass extends cc.Component {
             x: 0
         }
 
-        const xOffset = getRandomNumber(this.xOffsetMin, this.xOffsetMax);
-
-        data.x = (this.platformFrom.x || 0) + 100// + xOffset;
         data.width = getRandomNumber(this.platformWidthMin, this.platformWidthMax);
+
+        const xOffsetMax = this.platformTo.node.x - this.platformTo.node.width / 2 + this.screenWidth - data.width / 2
+        const xOffsetMin = this.screenRight
+        const xOffset = getRandomNumber(xOffsetMin, xOffsetMax);
+
+        data.x = xOffset
 
         return data
     }
@@ -92,13 +97,12 @@ export default class NewClass extends cc.Component {
     update (dt) {
         const currentPlatformRight = this.platformFrom ? this.platformFrom.node.x + this.platformFrom.node.width / 2 : this.screenLeft;
         const currentPlatformLeft = this.platformFrom ? this.platformFrom.node.x - this.platformFrom.node.width / 2 : this.screenLeft;
-        // cc.log()
+
         switch(globals.whatMoving){
             case 'hero': 
                
                 break
             case 'platforms': 
-            cc.log(this.platformFrom.node.x, this.platformFrom.node.width, this.screenLeft)
                 if(currentPlatformRight <= this.screenLeft && !globals.isPlatformHide) {
                     this.createPlatform()
                     globals.isPlatformHide = true

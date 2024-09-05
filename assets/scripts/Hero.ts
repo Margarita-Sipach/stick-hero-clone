@@ -13,6 +13,7 @@ const {ccclass, property} = cc._decorator;
 export default class NewClass extends cc.Component {
 
     screenLeft = -cc.winSize.width / 2
+    screenBottom = -cc.winSize.height / 2
 
     @property(cc.Label)
     label: cc.Label = null;
@@ -31,11 +32,11 @@ export default class NewClass extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.contactX = this.screenLeft
+        // this.contactX = this.screenLeft
 
         // let collider = this.node.getComponent(cc.PhysicsBoxCollider);
         // collider.size.width = 1;
-        // collider.offset.x = collider.offset.x - this.node.width / 2
+        // collider.offset.x = collider.offset.x + this.node.width / 2
 
         // collider.apply();
     }
@@ -77,7 +78,9 @@ export default class NewClass extends cc.Component {
 
                     if(!this.isContactStick && this.node.x >= globals.platformX){ 
                         // globals.isGameMove = true;
+                        globals.score++
                         globals.whatMoving = 'platforms'
+                        break
                     }
                 }
                 break;
@@ -87,7 +90,7 @@ export default class NewClass extends cc.Component {
             case 'stick':
                 break;
         }
-        
+        if(this.node.y < this.screenBottom) cc.director.loadScene('Finish');
         // if(!this.isContactPlatform && !this.isContactStick) return this.node.y--
     }
 }

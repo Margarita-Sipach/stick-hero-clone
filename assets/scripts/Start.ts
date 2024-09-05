@@ -5,13 +5,15 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 
+import { globals } from "./data/globals";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    @property(cc.Button)
+    playButton: cc.Button = null;
 
     @property
     text: string = 'hello';
@@ -21,7 +23,13 @@ export default class NewClass extends cc.Component {
     // onLoad () {}
 
     start () {
+        this.playButton.node.on(cc.Node.EventType.TOUCH_END, this.switchScene, this);
+    }
 
+    switchScene(){
+        globals.whatMoving = 'stick'
+        globals.score = 0
+        cc.director.loadScene('Game');
     }
 
     // update (dt) {}

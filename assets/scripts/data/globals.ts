@@ -5,11 +5,15 @@ interface Globals{
     isTouching: boolean
     platformX: number
     isPlatformHide: boolean
+    score: number
+    record: number
 }
 
 export const globals: Globals = {
     whatMoving: 'stick',
     isTouching: false,
     platformX: 0,
-    isPlatformHide: false
+    isPlatformHide: false,
+    score: 0,
+    record: 0
 }
