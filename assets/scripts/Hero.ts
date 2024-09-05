@@ -18,8 +18,8 @@ export default class NewClass extends cc.Component {
     @property(cc.Label)
     label: cc.Label = null;
 
-    @property
-    text: string = 'hello';
+    @property(cc.AudioClip)
+    loss: cc.AudioClip;
 
     isGoing = false
 
@@ -90,7 +90,10 @@ export default class NewClass extends cc.Component {
             case 'stick':
                 break;
         }
-        if(this.node.y < this.screenBottom) cc.director.loadScene('Finish');
+        if(this.node.y < this.screenBottom) {
+            cc.audioEngine.play(this.loss, false, 1);
+            cc.director.loadScene('Finish');
+        }
         // if(!this.isContactPlatform && !this.isContactStick) return this.node.y--
     }
 }

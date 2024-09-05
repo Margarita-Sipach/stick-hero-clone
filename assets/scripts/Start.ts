@@ -15,12 +15,16 @@ export default class NewClass extends cc.Component {
     @property(cc.Button)
     playButton: cc.Button = null;
 
-    @property
-    text: string = 'hello';
+    @property(cc.AudioClip)
+    music: cc.AudioClip;
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    onLoad () {
+        if (!cc.audioEngine.isMusicPlaying()) {
+            cc.audioEngine.playMusic(this.music, true);
+        }
+    }
 
     start () {
         this.playButton.node.on(cc.Node.EventType.TOUCH_END, this.switchScene, this);

@@ -58,7 +58,7 @@ export default class NewClass extends cc.Component {
             case 'hero': 
                 break;
             case 'platforms':
-                this.node.x -= 150 * dt
+                // this.node.x -= 150 * dt
                 break;
             case 'stick': 
                 if(globals.isTouching && this.isGrowing) {

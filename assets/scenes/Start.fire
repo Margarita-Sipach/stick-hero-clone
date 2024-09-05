@@ -756,7 +756,9 @@
     "playButton": {
       "__id__": 13
     },
-    "text": "hello",
+    "music": {
+      "__uuid__": "903f5013-4f12-4a84-bf12-0930135f406e"
+    },
     "_id": "25OKzP/uhGR4pebzxzyC21"
   }
 ]
