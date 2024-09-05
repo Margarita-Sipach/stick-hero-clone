@@ -12,6 +12,8 @@ export default class StartController extends cc.Component {
     music: cc.AudioClip;
 
     onLoad () {
+        globals.whatMoving = 'stick'
+        
         if (!cc.audioEngine.isMusicPlaying()) {
             cc.audioEngine.playMusic(this.music, true);
         }
@@ -34,6 +36,5 @@ export default class StartController extends cc.Component {
     switchScene(){
         globals.score = 0
         cc.director.loadScene('Game');
-        globals.whatMoving = 'stick'
     }
 }
