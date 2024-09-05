@@ -400,10 +400,6 @@
       "__id__": 5
     },
     "_enabled": true,
-    "label": null,
-    "loss": {
-      "__uuid__": "6a4d5163-dac9-42fb-ad77-f715f28fba75"
-    },
     "_id": "1eFn/Ep0dK0Zd+k/MoggmL"
   },
   {
@@ -735,6 +731,9 @@
     },
     "scoreLabel": {
       "__id__": 15
+    },
+    "lossSound": {
+      "__uuid__": "5ef77205-9a58-4261-9b53-83ee5bdb9723"
     },
     "_id": "11Lro5Cb9MIqU91yGkdnT9"
   }

@@ -1,16 +1,9 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
-
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class StartController extends cc.Component {
 
     @property(cc.Button)
     playButton: cc.Button = null;
@@ -18,23 +11,29 @@ export default class NewClass extends cc.Component {
     @property(cc.AudioClip)
     music: cc.AudioClip;
 
-    // LIFE-CYCLE CALLBACKS:
-
     onLoad () {
         if (!cc.audioEngine.isMusicPlaying()) {
             cc.audioEngine.playMusic(this.music, true);
         }
+
+        this.managersInit()
     }
 
     start () {
         this.playButton.node.on(cc.Node.EventType.TOUCH_END, this.switchScene, this);
     }
 
-    switchScene(){
-        globals.whatMoving = 'stick'
-        globals.score = 0
-        cc.director.loadScene('Game');
+    managersInit(){
+        let physicsManager = cc.director.getPhysicsManager();
+        physicsManager.enabled = true
+
+        let collisionManager = cc.director.getCollisionManager();
+        collisionManager.enabled = true
     }
 
-    // update (dt) {}
+    switchScene(){
+        globals.score = 0
+        cc.director.loadScene('Game');
+        globals.whatMoving = 'stick'
+    }
 }

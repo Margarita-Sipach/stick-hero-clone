@@ -16,7 +16,7 @@ interface Platform{
 }
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class PlatformsController extends cc.Component {
 
     @property
     platformWidthMin: number = 50;
@@ -41,10 +41,6 @@ export default class NewClass extends cc.Component {
     screenRight = cc.winSize.width / 2
     screenLeft = -cc.winSize.width / 2
     screenWidth = cc.winSize.width
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
 
     start () {
         this.platforms = []
@@ -99,9 +95,6 @@ export default class NewClass extends cc.Component {
         const currentPlatformLeft = this.platformFrom ? this.platformFrom.node.x - this.platformFrom.node.width / 2 : this.screenLeft;
 
         switch(globals.whatMoving){
-            case 'hero': 
-               
-                break
             case 'platforms': 
                 if(currentPlatformRight <= this.screenLeft && !globals.isPlatformHide) {
                     this.createPlatform()
@@ -109,7 +102,6 @@ export default class NewClass extends cc.Component {
                 }
                 else if(currentPlatformLeft <= this.screenLeft && globals.isPlatformHide){
                     globals.isPlatformHide = false
-
                     globals.whatMoving = 'stick'
                 }
                 break

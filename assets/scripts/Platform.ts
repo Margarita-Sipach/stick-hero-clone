@@ -1,44 +1,24 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
-
 import { globals } from "./data/globals";
+import { ScreenParams } from "./data/screen";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class PlatformController extends cc.Component {
 
     @property(cc.Prefab)
     stick: cc.Prefab = null;
 
-    active: boolean;
-
-    screenRight = cc.winSize.width / 2
-    screenLeft = -cc.winSize.width / 2
-    screenBottom = -cc.winSize.height / 2
     currentStick: any;
-    isMain: boolean;
     status: 'from' | 'to'
-
-    // LIFE-CYCLE CALLBACKS:
-
-    onLoad () {
-        
-
-    }
+    
 
     start () {
         this.createStick()
-
     }
 
-    init(width, x){
-        this.active = true
-        this.node.setPosition(cc.v2(x, this.screenBottom));
+    init(width: number, x: number){
+        this.node.setPosition(cc.v2(x, ScreenParams.bottom));
         this.node.width = width;
 
         let collider = this.node.getComponent(cc.PhysicsBoxCollider);
@@ -64,26 +44,13 @@ export default class NewClass extends cc.Component {
                 this.node.x -= 150 * dt
                 const platformLeft = this.node.x;
                 
-                if(platformLeft <= this.screenLeft && this.status === 'from' && globals.isPlatformHide){
+                if(platformLeft <= ScreenParams.left && this.status === 'from' && globals.isPlatformHide){
                     globals.whatMoving = 'stick'
                 }
                 if(this.status === 'to' && globals.isPlatformHide){
                     this.currentStick.reset()
                 }
         }
-        // if(globals.whatMoving === 'platforms'){
-           
-            // if(this.node.x - this.node.width / 2 < this.screenLeft && !this.isMain){
-            //     this.isMain = true
-            //     this.currentStick.canGrowing = true
-            //     globals.whatMoving = "platforms"
-            // }
-            // // else{
-            //     this.currentStick.canGrowing = false
-            // }
-        // }
-
-
-        
     }
 }
+

@@ -1,16 +1,10 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
-
+import { EVENT, EventDispatcher } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class GameController extends cc.Component {
 
     @property(cc.Node)
     hero: cc.Node = null;
@@ -18,10 +12,12 @@ export default class NewClass extends cc.Component {
     @property(cc.Label)
     scoreLabel: cc.Label;
 
-    // LIFE-CYCLE CALLBACKS:
+    @property(cc.AudioClip)
+    lossSound: cc.AudioClip;
 
     onLoad () {
         this.init()
+        EventDispatcher.on(EVENT.LOSS, this.loss)
     }
 
     start () {
@@ -29,29 +25,35 @@ export default class NewClass extends cc.Component {
     }
 
     init(){
-        let physicsManager = cc.director.getPhysicsManager();
+        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
+        //     cc.PhysicsManager.DrawBits.e_pairBit |
+        //     cc.PhysicsManager.DrawBits.e_centerOfMassBit |
+        //     cc.PhysicsManager.DrawBits.e_joinBit |
+        //     cc.PhysicsManager.DrawBits.e_shapeBit;
+
+        this.handleManagar()
+        this.handleTouch()
+    }
+
+    handleManagar(){
+        const physicsManager = cc.director.getPhysicsManager();
         physicsManager.enabled = true
 
-        let collisionManager = cc.director.getCollisionManager();
+        const collisionManager = cc.director.getCollisionManager();
         collisionManager.enabled = true
+    }
 
-        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
-            cc.PhysicsManager.DrawBits.e_pairBit |
-            cc.PhysicsManager.DrawBits.e_centerOfMassBit |
-            cc.PhysicsManager.DrawBits.e_joinBit |
-            cc.PhysicsManager.DrawBits.e_shapeBit;
-
-        this.node.on(cc.Node.EventType.TOUCH_START, () => {
-            globals.isTouching = true
-        })
-
-        this.node.on(cc.Node.EventType.TOUCH_END, () => {
-            globals.isTouching = false
-
-        })
+    handleTouch(){
+        this.node.on(cc.Node.EventType.TOUCH_START, () => EventDispatcher.emit(EVENT.TOUCH_START), this);
+        this.node.on(cc.Node.EventType.TOUCH_END, () => EventDispatcher.emit(EVENT.TOUCH_END), this);
     }
 
     update (dt) {
         this.scoreLabel.string = `Score:\n${globals.score}`;
+    }
+
+    loss(){
+        cc.audioEngine.stopAllEffects()
+        cc.audioEngine.playEffect(this.lossSound, false);
     }
 }

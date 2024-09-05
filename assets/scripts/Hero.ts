@@ -1,99 +1,55 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
-
+import { EVENT, EventDispatcher } from "./data/constants";
 import { globals } from "./data/globals";
+import { ScreenParams } from "./data/screen";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
-
-    screenLeft = -cc.winSize.width / 2
-    screenBottom = -cc.winSize.height / 2
-
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property(cc.AudioClip)
-    loss: cc.AudioClip;
-
-    isGoing = false
+export default class HeroController extends cc.Component {
 
     isContactStick = false
     isContactPlatform = true
 
     contactX = 0
-    step: boolean;
-
-    // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        // this.contactX = this.screenLeft
-
-        // let collider = this.node.getComponent(cc.PhysicsBoxCollider);
-        // collider.size.width = 1;
-        // collider.offset.x = collider.offset.x + this.node.width / 2
-
-        // collider.apply();
+        this.contactX = ScreenParams.left
+        this.boxColliderInit()
     }
     
-    
-
-    start () {
-
+    boxColliderInit(){
+        let collider = this.node.getComponent(cc.PhysicsBoxCollider);
+        collider.size.width = 1;
+        collider.offset.x = collider.offset.x + this.node.width / 2
+        collider.apply();
     }
-
 
     onBeginContact(contact, selfCollider, otherCollider){
-        if(otherCollider.node.name === 'stick'){
-            this.isContactStick = true
-        }
-        if(otherCollider.node.name === 'platform'){
-            otherCollider.node.isMain = true
-            this.isContactPlatform = true
-            
-            // this.contactX = this.node.x + this.node.width
-        }
+        this.isContactStick = otherCollider.node.name === 'stick'
+        this.isContactPlatform = otherCollider.node.name === 'platform'
     }
 
     onEndContact(contact, selfCollider, otherCollider){
-        if(otherCollider.node.name === 'stick'){
-            this.isContactStick = false
-            this.isGoing = false
-        }
-        if(otherCollider.node.name === 'platform'){
-            this.isContactPlatform = false
-        }
+        this.isContactStick = !(otherCollider.node.name === 'stick')
+        this.isContactPlatform = !(otherCollider.node.name === 'platform')
     }
 
     update (dt) {
         switch(globals.whatMoving){
             case 'hero':
-                for(let i = 0; i < 10; i++) {
-                    this.node.x++;
-
-                    if(!this.isContactStick && this.node.x >= globals.platformX){ 
-                        // globals.isGameMove = true;
-                        globals.score++
-                        globals.whatMoving = 'platforms'
-                        break
-                    }
+                this.node.x += 1000 * dt;
+                
+                if(!this.isContactStick && this.node.x >= globals.platformX){
+                    globals.score++
+                    globals.whatMoving = 'platforms'
                 }
                 break;
             case 'platforms':
                 this.node.x -= 150 * dt
                 break;
-            case 'stick':
-                break;
         }
-        if(this.node.y < this.screenBottom) {
-            cc.audioEngine.play(this.loss, false, 1);
-            cc.director.loadScene('Finish');
-        }
-        // if(!this.isContactPlatform && !this.isContactStick) return this.node.y--
+        if(this.node.y < 350 / 2 + ScreenParams.bottom) EventDispatcher.emit(EVENT.LOSS)
     }
+
+    
 }
