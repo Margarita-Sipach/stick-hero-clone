@@ -1,3 +1,4 @@
+import { SCENE } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
@@ -13,7 +14,7 @@ export default class StartController extends cc.Component {
 
     onLoad () {
         globals.whatMoving = 'stick'
-        
+
         if (!cc.audioEngine.isMusicPlaying()) {
             cc.audioEngine.playMusic(this.music, true);
         }
@@ -35,6 +36,6 @@ export default class StartController extends cc.Component {
 
     switchScene(){
         globals.score = 0
-        cc.director.loadScene('Game');
+        cc.director.loadScene(SCENE.GAME);
     }
 }

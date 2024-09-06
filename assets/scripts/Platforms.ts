@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 
 import { globals } from "./data/globals";
+import { ScreenParams } from "./data/screen";
 import { getRandomNumber } from "./utils/getRandomNumber";
 
 const {ccclass, property} = cc._decorator;
@@ -24,12 +25,6 @@ export default class PlatformsController extends cc.Component {
     @property
     platformWidthMax: number = 200;
 
-    @property
-    xOffsetMin: number = 60;
-
-    @property
-    xOffsetMax: number = 200;
-
     @property (cc.Prefab)
     platform: cc.Prefab = null;
 
@@ -37,10 +32,6 @@ export default class PlatformsController extends cc.Component {
 
     platformFrom
     platformTo
-    
-    screenRight = cc.winSize.width / 2
-    screenLeft = -cc.winSize.width / 2
-    screenWidth = cc.winSize.width
 
     start () {
         this.platforms = []
@@ -51,7 +42,7 @@ export default class PlatformsController extends cc.Component {
         this.platformTo = this.platforms[1]
 
         this.createPlatform()
-        this.platformFrom.init(500, this.screenLeft)
+        this.platformFrom.init(500, ScreenParams.left)
         this.platformTo.init(200, 0)
     }
 
@@ -81,8 +72,8 @@ export default class PlatformsController extends cc.Component {
 
         data.width = getRandomNumber(this.platformWidthMin, this.platformWidthMax);
 
-        const xOffsetMax = this.platformTo.node.x - this.platformTo.node.width / 2 + this.screenWidth - data.width / 2
-        const xOffsetMin = this.screenRight
+        const xOffsetMax = this.platformTo.node.x - this.platformTo.node.width / 2 + ScreenParams.width - data.width / 2
+        const xOffsetMin = ScreenParams.right
         const xOffset = getRandomNumber(xOffsetMin, xOffsetMax);
 
         data.x = xOffset
@@ -91,16 +82,16 @@ export default class PlatformsController extends cc.Component {
     }
 
     update (dt) {
-        const currentPlatformRight = this.platformFrom ? this.platformFrom.node.x + this.platformFrom.node.width / 2 : this.screenLeft;
-        const currentPlatformLeft = this.platformFrom ? this.platformFrom.node.x - this.platformFrom.node.width / 2 : this.screenLeft;
+        const currentPlatformRight = this.platformFrom ? this.platformFrom.node.x + this.platformFrom.node.width / 2 : ScreenParams.left;
+        const currentPlatformLeft = this.platformFrom ? this.platformFrom.node.x - this.platformFrom.node.width / 2 : ScreenParams.left;
 
         switch(globals.whatMoving){
             case 'platforms': 
-                if(currentPlatformRight <= this.screenLeft && !globals.isPlatformHide) {
+                if(currentPlatformRight <= ScreenParams.left && !globals.isPlatformHide) {
                     this.createPlatform()
                     globals.isPlatformHide = true
                 }
-                else if(currentPlatformLeft <= this.screenLeft && globals.isPlatformHide){
+                else if(currentPlatformLeft <= ScreenParams.left && globals.isPlatformHide){
                     globals.isPlatformHide = false
                     globals.whatMoving = 'stick'
                 }

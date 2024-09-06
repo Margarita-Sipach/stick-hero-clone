@@ -1,3 +1,4 @@
+import { SCENE } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
@@ -6,13 +7,13 @@ const {ccclass, property} = cc._decorator;
 export default class FinishController extends cc.Component {
 
     @property(cc.Label)
-    scoreLabel: cc.Label = null;
+    scoreLabel: cc.Label;
 
     @property(cc.Label)
-    recordLabel: cc.Label = null;
+    recordLabel: cc.Label;
 
     @property(cc.Button)
-    restartButton: cc.Button = null;
+    restartButton: cc.Button;
 
     start () {
         if (!globals.record || globals.score > globals.record) {
@@ -26,6 +27,6 @@ export default class FinishController extends cc.Component {
     }
 
     switchScene(){
-        cc.director.loadScene('Start');
+        cc.director.loadScene(SCENE.START);
     }
 }

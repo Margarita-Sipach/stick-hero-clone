@@ -1,3 +1,4 @@
+import { COMPONENT } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 
@@ -11,7 +12,8 @@ export default class PlatformController extends cc.Component {
 
     currentStick: any;
     status: 'from' | 'to'
-    
+
+    isContactHero = false
 
     start () {
         this.createStick()
@@ -28,6 +30,18 @@ export default class PlatformController extends cc.Component {
         collider.apply();
     }
 
+    onBeginContact(contact, selfCollider, otherCollider){
+        cc.log(otherCollider.node.name, globals.whatMoving === 'stick')
+        if(otherCollider.node.name === 'Hero' && this.status === 'to') {
+            const label = this.node.getChildByName('label')
+            this.node.removeChild(label)
+        }
+        this.isContactHero = otherCollider.node.name === 'hero'
+    }
+
+    onEndContact(contact, selfCollider, otherCollider){
+        this.isContactHero = !(otherCollider.node.name === 'hero')
+    }
  
     createStick(){
         const stick = cc.instantiate(this.stick);
@@ -50,6 +64,8 @@ export default class PlatformController extends cc.Component {
                 if(this.status === 'to' && globals.isPlatformHide){
                     this.currentStick.reset()
                 }
+            case 'stick':
+                
         }
     }
 }

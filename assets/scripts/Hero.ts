@@ -1,4 +1,4 @@
-import { EVENT, EventDispatcher } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 
@@ -10,10 +10,11 @@ export default class HeroController extends cc.Component {
     isContactStick = false
     isContactPlatform = true
 
-    contactX = 0
+    @property(cc.AudioClip)
+    successSound: cc.AudioClip;
+    
 
     onLoad () {
-        this.contactX = ScreenParams.left
         this.boxColliderInit()
     }
     
@@ -42,13 +43,15 @@ export default class HeroController extends cc.Component {
                 if(!this.isContactStick && this.node.x >= globals.platformX){
                     globals.score++
                     globals.whatMoving = 'platforms'
+                    cc.audioEngine.playEffect(this.successSound, false);
+
                 }
                 break;
             case 'platforms':
                 this.node.x -= 150 * dt
                 break;
         }
-        if(this.node.y < 350 / 2 + ScreenParams.bottom) EventDispatcher.emit(EVENT.LOSS)
+        if(this.node.y < 350 / 2 + ScreenParams.bottom) return EventDispatcher.emit(EVENT.LOSS)
     }
 
     

@@ -146,7 +146,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "background",
+    "_name": "Background",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -709,7 +709,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "score",
+    "_name": "Score",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -804,7 +804,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "record",
+    "_name": "Record",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2

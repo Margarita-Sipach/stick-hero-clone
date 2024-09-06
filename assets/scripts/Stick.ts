@@ -1,4 +1,4 @@
-import { EVENT, EventDispatcher } from "./data/constants";
+import { EVENT, EventDispatcher, SCENE } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
@@ -97,6 +97,6 @@ export default class StickController extends cc.Component {
     loss(){
         this.rotationAngle -= 2;
         this.node.angle = this.rotationAngle;
-        if(this.rotationAngle <= -130) cc.director.loadScene('Finish');
+        if(this.rotationAngle <= -130) cc.director.loadScene(SCENE.FINISH);
     }
 }

@@ -6,3 +6,15 @@ export enum EVENT{
 }
 
 export const EventDispatcher = new cc.EventTarget();
+
+export enum SCENE{
+    START = 'Start',
+    GAME = 'Game',
+    FINISH = 'Finish',
+}
+
+export enum COMPONENT{
+    HERO = 'Hero',
+    STICK = 'Stick',
+    PLATFORM = 'Platform',
+}

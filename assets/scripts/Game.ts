@@ -6,9 +6,6 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class GameController extends cc.Component {
 
-    @property(cc.Node)
-    hero: cc.Node = null;
-
     @property(cc.Label)
     scoreLabel: cc.Label;
 
@@ -18,10 +15,6 @@ export default class GameController extends cc.Component {
     onLoad () {
         this.init()
         EventDispatcher.on(EVENT.LOSS, this.loss)
-    }
-
-    start () {
-        
     }
 
     init(){
@@ -53,7 +46,6 @@ export default class GameController extends cc.Component {
     }
 
     loss(){
-        cc.audioEngine.stopAllEffects()
         cc.audioEngine.playEffect(this.lossSound, false);
     }
 }
