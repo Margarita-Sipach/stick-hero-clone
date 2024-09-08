@@ -1,4 +1,4 @@
-import { COMPONENT, EVENT, EventDispatcher } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher, SPEED } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 
@@ -56,7 +56,7 @@ export default class PlatformController extends cc.Component {
 
         switch(globals.whatMoving){
             case COMPONENT.PLATFORMS:
-                this.node.x -= 150 * dt
+                this.node.x -= SPEED.SLOW * dt
                 const platformLeft = this.node.x;
                 
                 if(platformLeft <= ScreenParams.left && this.status === 'from' && globals.isPlatformHide){

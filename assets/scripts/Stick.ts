@@ -1,5 +1,10 @@
-import { COMPONENT, EVENT, EventDispatcher, SCENE } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher, SCENE, SPEED } from "./data/constants";
 import { globals } from "./data/globals";
+
+enum ANGLE{
+    LIE = -90,
+    LOSS = 130
+}
 
 const {ccclass, property} = cc._decorator;
 
@@ -47,14 +52,14 @@ export default class StickController extends cc.Component {
     update (dt) {
         switch(globals.whatMoving){
             case COMPONENT.PLATFORMS:
-                this.node.x -= 150 * dt
+                this.node.x -= SPEED.SLOW * dt
                 break;
             case COMPONENT.STICK: 
-                this.handleStick()
+                this.handleStick(dt)
                 break;
         }
 
-        if(this.isLoss) this.loss()
+        if(this.isLoss) this.loss(dt)
         
         this.updateCollider()   
     }
@@ -67,36 +72,36 @@ export default class StickController extends cc.Component {
         collider.apply();
     }
 
-    handleStick(){
+    handleStick(dt){
         if(this.isTouching && this.isGrowing && !this.rotationAngle) {
-            this.growStick()
+            this.growStick(dt)
         }
         else if(this.wasTouched){
-            this.lieStick()
+            this.lieStick(dt)
         }
     }
 
-    growStick(){
-        this.stickHeight += 5;
+    growStick(dt){
+        this.stickHeight += SPEED.SLOW * dt;
         this.node.height = this.stickHeight
         this.wasTouched = true
     }
 
-    lieStick(){
-        this.rotationAngle -= 2;
+    lieStick(dt){
+        this.rotationAngle -= SPEED.SLOW * dt;
         this.node.angle = this.rotationAngle;
         
-        if (this.node.angle <= -90) {
-            this.node.angle = -90
+        if (this.node.angle <= ANGLE.LIE) {
+            this.node.angle = ANGLE.LIE
             this.isGrowing = false
             this.wasTouched = false
             globals.whatMoving = COMPONENT.HERO
         }
     }
 
-    loss(){
-        this.rotationAngle -= 2;
+    loss(dt){
+        this.rotationAngle -= SPEED.FAST * dt;
         this.node.angle = this.rotationAngle;
-        if(this.rotationAngle <= -130) cc.director.loadScene(SCENE.FINISH);
+        if(this.rotationAngle <= ANGLE.LOSS) cc.director.loadScene(SCENE.FINISH);
     }
 }

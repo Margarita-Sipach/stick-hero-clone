@@ -21,3 +21,8 @@ export enum COMPONENT{
     PLATFORMS = 'Platforms',
     LABEL = 'Label'
 }
+
+export enum SPEED{
+    SLOW = 100,
+    FAST = 1000
+}
