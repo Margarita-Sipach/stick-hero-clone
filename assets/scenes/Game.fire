@@ -498,9 +498,6 @@
       "__id__": 7
     },
     "_enabled": true,
-    "successSound": {
-      "__uuid__": "887b2888-82df-409c-9268-9447898b1529"
-    },
     "_id": "1eFn/Ep0dK0Zd+k/MoggmL"
   },
   {
@@ -732,6 +729,9 @@
     },
     "lossSound": {
       "__uuid__": "f89f6a0b-4477-4d0a-beef-37393c571456"
+    },
+    "successSound": {
+      "__uuid__": "887b2888-82df-409c-9268-9447898b1529"
     },
     "_id": "11Lro5Cb9MIqU91yGkdnT9"
   }

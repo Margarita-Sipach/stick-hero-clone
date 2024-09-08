@@ -1,4 +1,4 @@
-import { EVENT, EventDispatcher } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
@@ -12,9 +12,13 @@ export default class GameController extends cc.Component {
     @property(cc.AudioClip)
     lossSound: cc.AudioClip;
 
+    @property(cc.AudioClip)
+    successSound: cc.AudioClip;
+
     onLoad () {
         this.init()
-        EventDispatcher.on(EVENT.LOSS, this.loss)
+        EventDispatcher.on(EVENT.LOSS, this.loss, this)
+        EventDispatcher.on(EVENT.HERO_CAME, this.heroCame, this)
     }
 
     init(){
@@ -37,8 +41,8 @@ export default class GameController extends cc.Component {
     }
 
     handleTouch(){
-        this.node.on(cc.Node.EventType.TOUCH_START, () => EventDispatcher.emit(EVENT.TOUCH_START), this);
-        this.node.on(cc.Node.EventType.TOUCH_END, () => EventDispatcher.emit(EVENT.TOUCH_END), this);
+        this.node.on(cc.Node.EventType.TOUCH_START, () => EventDispatcher.emit(EVENT.TOUCH_START));
+        this.node.on(cc.Node.EventType.TOUCH_END, () => EventDispatcher.emit(EVENT.TOUCH_END));
     }
 
     update (dt) {
@@ -46,6 +50,18 @@ export default class GameController extends cc.Component {
     }
 
     loss(){
+        this.stopAudioEffects()
         cc.audioEngine.playEffect(this.lossSound, false);
+    }
+
+    heroCame(){
+        globals.score++
+        globals.whatMoving = COMPONENT.PLATFORMS
+        this.stopAudioEffects()
+        cc.audioEngine.playEffect(this.successSound, false);
+    }
+
+    stopAudioEffects(){
+        cc.audioEngine.stopAllEffects()
     }
 }

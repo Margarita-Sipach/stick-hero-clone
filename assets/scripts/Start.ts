@@ -1,4 +1,4 @@
-import { SCENE } from "./data/constants";
+import { COMPONENT, SCENE } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
@@ -13,7 +13,7 @@ export default class StartController extends cc.Component {
     music: cc.AudioClip;
 
     onLoad () {
-        globals.whatMoving = 'stick'
+        globals.whatMoving = COMPONENT.STICK
 
         if (!cc.audioEngine.isMusicPlaying()) {
             cc.audioEngine.playMusic(this.music, true);

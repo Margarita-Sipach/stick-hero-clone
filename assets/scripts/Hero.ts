@@ -8,11 +8,6 @@ const {ccclass, property} = cc._decorator;
 export default class HeroController extends cc.Component {
 
     isContactStick = false
-    isContactPlatform = true
-
-    @property(cc.AudioClip)
-    successSound: cc.AudioClip;
-    
 
     onLoad () {
         this.boxColliderInit()
@@ -26,28 +21,23 @@ export default class HeroController extends cc.Component {
     }
 
     onBeginContact(contact, selfCollider, otherCollider){
-        this.isContactStick = otherCollider.node.name === 'stick'
-        this.isContactPlatform = otherCollider.node.name === 'platform'
+        this.isContactStick = otherCollider.node.name === COMPONENT.STICK
     }
 
     onEndContact(contact, selfCollider, otherCollider){
-        this.isContactStick = !(otherCollider.node.name === 'stick')
-        this.isContactPlatform = !(otherCollider.node.name === 'platform')
+        this.isContactStick = !(otherCollider.node.name === COMPONENT.STICK)
     }
 
     update (dt) {
         switch(globals.whatMoving){
-            case 'hero':
+            case COMPONENT.HERO:
                 this.node.x += 1000 * dt;
                 
                 if(!this.isContactStick && this.node.x >= globals.platformX){
-                    globals.score++
-                    globals.whatMoving = 'platforms'
-                    cc.audioEngine.playEffect(this.successSound, false);
-
+                    EventDispatcher.emit(EVENT.HERO_CAME)
                 }
                 break;
-            case 'platforms':
+            case COMPONENT.PLATFORMS:
                 this.node.x -= 150 * dt
                 break;
         }

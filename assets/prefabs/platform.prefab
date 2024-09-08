@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "platform",
+    "_name": "Platform",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -88,7 +88,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "label",
+    "_name": "Label",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1

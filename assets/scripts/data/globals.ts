@@ -1,7 +1,7 @@
-type WhatMoving = 'platforms' | 'hero' | 'stick'
+import { COMPONENT } from "./constants"
 
 interface Globals{
-    whatMoving: WhatMoving
+    whatMoving: COMPONENT
     platformX: number
     isPlatformHide: boolean
     score: number
@@ -9,7 +9,7 @@ interface Globals{
 }
 
 export const globals: Globals = {
-    whatMoving: 'stick',
+    whatMoving: COMPONENT.STICK,
     platformX: 0,
     isPlatformHide: false,
     score: 0,

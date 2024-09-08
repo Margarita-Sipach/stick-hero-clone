@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 
+import { COMPONENT } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 import { getRandomNumber } from "./utils/getRandomNumber";
@@ -60,7 +61,7 @@ export default class PlatformsController extends cc.Component {
     createNewPlatform(){
         const platform = cc.instantiate(this.platform);
         this.node.addChild(platform);
-        const platformNode = platform.getComponent('Platform');
+        const platformNode = platform.getComponent(COMPONENT.PLATFORM);
         this.platforms.push(platformNode)
     }
 
@@ -86,17 +87,17 @@ export default class PlatformsController extends cc.Component {
         const currentPlatformLeft = this.platformFrom ? this.platformFrom.node.x - this.platformFrom.node.width / 2 : ScreenParams.left;
 
         switch(globals.whatMoving){
-            case 'platforms': 
+            case COMPONENT.PLATFORMS: 
                 if(currentPlatformRight <= ScreenParams.left && !globals.isPlatformHide) {
                     this.createPlatform()
                     globals.isPlatformHide = true
                 }
                 else if(currentPlatformLeft <= ScreenParams.left && globals.isPlatformHide){
                     globals.isPlatformHide = false
-                    globals.whatMoving = 'stick'
+                    globals.whatMoving = COMPONENT.STICK
                 }
                 break
-            case 'stick': 
+            case COMPONENT.STICK: 
                 globals.platformX = this.platformTo.node.x + this.platformTo.node.width / 2 - 67
                 break
 

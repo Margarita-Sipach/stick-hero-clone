@@ -1,4 +1,4 @@
-import { EVENT, EventDispatcher, SCENE } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher, SCENE } from "./data/constants";
 import { globals } from "./data/globals";
 
 const {ccclass, property} = cc._decorator;
@@ -46,10 +46,10 @@ export default class StickController extends cc.Component {
 
     update (dt) {
         switch(globals.whatMoving){
-            case 'platforms':
+            case COMPONENT.PLATFORMS:
                 this.node.x -= 150 * dt
                 break;
-            case 'stick': 
+            case COMPONENT.STICK: 
                 this.handleStick()
                 break;
         }
@@ -90,7 +90,7 @@ export default class StickController extends cc.Component {
             this.node.angle = -90
             this.isGrowing = false
             this.wasTouched = false
-            globals.whatMoving = 'hero'
+            globals.whatMoving = COMPONENT.HERO
         }
     }
 

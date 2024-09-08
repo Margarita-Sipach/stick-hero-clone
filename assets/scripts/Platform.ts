@@ -1,4 +1,4 @@
-import { COMPONENT } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 
@@ -13,9 +13,12 @@ export default class PlatformController extends cc.Component {
     currentStick: any;
     status: 'from' | 'to'
 
-    isContactHero = false
+    onLoad() {
+        EventDispatcher.on(EVENT.HERO_CAME, this.heroCame, this);
+    }
 
     start () {
+        if(this.status === 'from') this.deleteLabel()
         this.createStick()
     }
 
@@ -29,43 +32,39 @@ export default class PlatformController extends cc.Component {
 
         collider.apply();
     }
-
-    onBeginContact(contact, selfCollider, otherCollider){
-        cc.log(otherCollider.node.name, globals.whatMoving === 'stick')
-        if(otherCollider.node.name === 'Hero' && this.status === 'to') {
-            const label = this.node.getChildByName('label')
-            this.node.removeChild(label)
-        }
-        this.isContactHero = otherCollider.node.name === 'hero'
-    }
-
-    onEndContact(contact, selfCollider, otherCollider){
-        this.isContactHero = !(otherCollider.node.name === 'hero')
-    }
  
     createStick(){
         const stick = cc.instantiate(this.stick);
         this.node.addChild(stick);
-        this.currentStick = stick.getComponent('Stick');
+        this.currentStick = stick.getComponent(COMPONENT.STICK);
         this.currentStick.init(this.node.width / 2, this.node.height / 2, this.status === 'from')
+    }
+
+    heroCame(){
+        if(this.status === 'to') {
+            this.deleteLabel()  
+        }
+    }
+
+    deleteLabel(){
+        const label = this.node.getChildByName(COMPONENT.LABEL)
+        this.node.removeChild(label)
     }
 
     update (dt) {
         this.currentStick.init(this.node.width / 2, this.node.height / 2, this.status === 'from');
 
         switch(globals.whatMoving){
-            case 'platforms':
+            case COMPONENT.PLATFORMS:
                 this.node.x -= 150 * dt
                 const platformLeft = this.node.x;
                 
                 if(platformLeft <= ScreenParams.left && this.status === 'from' && globals.isPlatformHide){
-                    globals.whatMoving = 'stick'
+                    globals.whatMoving = COMPONENT.STICK
                 }
                 if(this.status === 'to' && globals.isPlatformHide){
                     this.currentStick.reset()
                 }
-            case 'stick':
-                
         }
     }
 }
