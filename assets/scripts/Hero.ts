@@ -8,9 +8,13 @@ const {ccclass, property} = cc._decorator;
 export default class HeroController extends cc.Component {
 
     isContactStick = false
+    endPlatformRight: number;
+    startY = ScreenParams.top
 
     onLoad () {
+        this.startY = this.node.y
         this.boxColliderInit()
+        EventDispatcher.on(EVENT.PLATFORM_STOP, (endPlatformRight: number) => this.endPlatformRight = endPlatformRight, this)
     }
     
     boxColliderInit(){
@@ -33,16 +37,14 @@ export default class HeroController extends cc.Component {
             case COMPONENT.HERO:
                 this.node.x += SPEED.FAST * dt;
                 
-                if(!this.isContactStick && this.node.x >= globals.platformX){
-                    EventDispatcher.emit(EVENT.HERO_CAME)
-                }
+                const isHeroCame = !this.isContactStick && this.node.x >= this.endPlatformRight - this.node.width * this.node.scale
+                if(isHeroCame) EventDispatcher.emit(EVENT.HERO_CAME)
                 break;
             case COMPONENT.PLATFORMS:
                 this.node.x -= SPEED.SLOW * dt
                 break;
         }
-        if(this.node.y < 350 / 2 + ScreenParams.bottom) return EventDispatcher.emit(EVENT.LOSS)
+        const isHeroFell = this.node.y < this.startY / 2 + ScreenParams.bottom
+        if(isHeroFell) return EventDispatcher.emit(EVENT.LOSS)
     }
-
-    
 }

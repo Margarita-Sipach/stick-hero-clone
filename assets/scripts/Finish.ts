@@ -15,15 +15,18 @@ export default class FinishController extends cc.Component {
     @property(cc.Button)
     restartButton: cc.Button;
 
+    onLoad() {
+        this.restartButton.node.on(cc.Node.EventType.TOUCH_END, this.switchScene, this);
+    }
+
     start () {
-        if (!globals.record || globals.score > globals.record) {
+        const isRecordNeedUpdate = !globals.record || globals.score > globals.record
+        if (isRecordNeedUpdate) {
             globals.record = globals.score;
         }
 
         this.scoreLabel.string = `Score:\n${globals.score}`;
         this.recordLabel.string = `Best Score:\n${globals.record}`;
-
-        this.restartButton.node.on(cc.Node.EventType.TOUCH_END, this.switchScene, this);
     }
 
     switchScene(){

@@ -3,7 +3,8 @@ export enum EVENT{
     TOUCH_END = 'TOUCH_END',
     LOSS = 'LOSS',
     HIDE_PLATFORM = 'HIDE_PLATFORM',
-    HERO_CAME = 'HERO_CAME'
+    HERO_CAME = 'HERO_CAME',
+    PLATFORM_STOP = 'PLATFORM_STOP',
 }
 
 export const EventDispatcher = new cc.EventTarget();
@@ -25,4 +26,10 @@ export enum COMPONENT{
 export enum SPEED{
     SLOW = 100,
     FAST = 1000
+}
+
+export enum PLATFORM_STATUS{
+    HIDDEN = 'HIDDEN',
+    START = 'START',
+    END = 'END',
 }

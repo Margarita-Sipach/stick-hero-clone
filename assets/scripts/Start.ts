@@ -27,10 +27,10 @@ export default class StartController extends cc.Component {
     }
 
     managersInit(){
-        let physicsManager = cc.director.getPhysicsManager();
+        const physicsManager = cc.director.getPhysicsManager();
         physicsManager.enabled = true
 
-        let collisionManager = cc.director.getCollisionManager();
+        const collisionManager = cc.director.getCollisionManager();
         collisionManager.enabled = true
     }
 

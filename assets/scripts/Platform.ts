@@ -1,4 +1,4 @@
-import { COMPONENT, EVENT, EventDispatcher, SPEED } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher, PLATFORM_STATUS, SPEED } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 
@@ -11,14 +11,14 @@ export default class PlatformController extends cc.Component {
     stick: cc.Prefab = null;
 
     currentStick: any;
-    status: 'from' | 'to'
+    status: PLATFORM_STATUS
 
     onLoad() {
         EventDispatcher.on(EVENT.HERO_CAME, this.heroCame, this);
     }
 
     start () {
-        if(this.status === 'from') this.deleteLabel()
+        if(this.status === PLATFORM_STATUS.START) this.deleteLabel()
         this.createStick()
     }
 
@@ -26,7 +26,7 @@ export default class PlatformController extends cc.Component {
         this.node.setPosition(cc.v2(x, ScreenParams.bottom));
         this.node.width = width;
 
-        let collider = this.node.getComponent(cc.PhysicsBoxCollider);
+        const collider = this.node.getComponent(cc.PhysicsBoxCollider);
         collider.size.width = this.node.width;
         collider.size.height = this.node.height;
 
@@ -37,11 +37,11 @@ export default class PlatformController extends cc.Component {
         const stick = cc.instantiate(this.stick);
         this.node.addChild(stick);
         this.currentStick = stick.getComponent(COMPONENT.STICK);
-        this.currentStick.init(this.node.width / 2, this.node.height / 2, this.status === 'from')
+        this.currentStick.init(this.node.width / 2, this.node.height / 2, this.status === PLATFORM_STATUS.START)
     }
 
     heroCame(){
-        if(this.status === 'to') {
+        if(this.status === PLATFORM_STATUS.END) {
             this.deleteLabel()  
         }
     }
@@ -52,20 +52,19 @@ export default class PlatformController extends cc.Component {
     }
 
     update (dt) {
-        this.currentStick.init(this.node.width / 2, this.node.height / 2, this.status === 'from');
+        this.currentStick.init(this.node.width / 2, this.node.height / 2, this.status === PLATFORM_STATUS.START);
 
         switch(globals.whatMoving){
             case COMPONENT.PLATFORMS:
                 this.node.x -= SPEED.SLOW * dt
-                const platformLeft = this.node.x;
+                const isStickMoving = this.node.x <= ScreenParams.left && this.status === PLATFORM_STATUS.START && globals.isPlatformHide
                 
-                if(platformLeft <= ScreenParams.left && this.status === 'from' && globals.isPlatformHide){
+                if(isStickMoving){
                     globals.whatMoving = COMPONENT.STICK
                 }
-                if(this.status === 'to' && globals.isPlatformHide){
+                if(this.status === PLATFORM_STATUS.END){
                     this.currentStick.reset()
                 }
         }
     }
 }
-

@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 
-import { COMPONENT } from "./data/constants";
+import { COMPONENT, EVENT, EventDispatcher, PLATFORM_STATUS } from "./data/constants";
 import { globals } from "./data/globals";
 import { ScreenParams } from "./data/screen";
 import { getRandomNumber } from "./utils/getRandomNumber";
@@ -31,31 +31,45 @@ export default class PlatformsController extends cc.Component {
 
     platforms: any[] = []
 
-    platformFrom
-    platformTo
+    platformStart
+    platformEnd
+    platformHidden
 
     start () {
-        this.platforms = []
-        this.createNewPlatform()
-        this.createNewPlatform()
-        
-        this.platformFrom = this.platforms[0]
-        this.platformTo = this.platforms[1]
-
-        this.createPlatform()
-        this.platformFrom.init(500, ScreenParams.left)
-        this.platformTo.init(200, 0)
+        this.init()
     }
 
-    createPlatform(baseData?: Platform){
+    init(){
+        const defaultPlatformsParams = [
+            [ 300, ScreenParams.left - 100],
+            [ 500, ScreenParams.left],
+            [ 200, 0 ]
+        ]
+
+        this.platforms = []
+        for(let i = 0; i < 3; i++) this.createNewPlatform()
+
+        this.platformHidden = this.platforms[0]
+        this.platformStart = this.platforms[1]
+        this.platformEnd = this.platforms[2]
+
+        this.updatePlatforms()
+
+        this.platformHidden.init(...defaultPlatformsParams[0])
+        this.platformStart.init(...defaultPlatformsParams[1])
+        this.platformEnd.init(...defaultPlatformsParams[2])
+    }
+
+    updatePlatforms(baseData?: Platform){
         const data = baseData || this.generatePlatformParams();
 
-        [this.platformFrom, this.platformTo] = [this.platformTo, this.platformFrom]
+        [this.platformHidden, this.platformStart, this.platformEnd] = [this.platformStart, this.platformEnd, this.platformHidden]
 
-        this.platformFrom.status = 'from'
-        this.platformTo.status = 'to'
+        this.platformStart.status = PLATFORM_STATUS.START
+        this.platformEnd.status = PLATFORM_STATUS.END
+        this.platformHidden.status = PLATFORM_STATUS.HIDDEN
         
-        this.platformTo.init(data.width, data.x)
+        this.platformEnd.init(data.width, data.x)
     }
 
     createNewPlatform(){
@@ -73,7 +87,7 @@ export default class PlatformsController extends cc.Component {
 
         data.width = getRandomNumber(this.platformWidthMin, this.platformWidthMax);
 
-        const xOffsetMax = this.platformTo.node.x - this.platformTo.node.width / 2 + ScreenParams.width - data.width / 2
+        const xOffsetMax = this.platformEnd.node.x - this.platformEnd.node.width / 2 + ScreenParams.width - data.width / 2
         const xOffsetMin = ScreenParams.right
         const xOffset = getRandomNumber(xOffsetMin, xOffsetMax);
 
@@ -83,25 +97,39 @@ export default class PlatformsController extends cc.Component {
     }
 
     update (dt) {
-        const currentPlatformRight = this.platformFrom ? this.platformFrom.node.x + this.platformFrom.node.width / 2 : ScreenParams.left;
-        const currentPlatformLeft = this.platformFrom ? this.platformFrom.node.x - this.platformFrom.node.width / 2 : ScreenParams.left;
+        const getStartPlatformX = (isLeft?: boolean) => this.platformStart.node.x + (isLeft ? -1 : 1) * this.platformStart.node.width / 2;
 
         switch(globals.whatMoving){
             case COMPONENT.PLATFORMS: 
-                if(currentPlatformRight <= ScreenParams.left && !globals.isPlatformHide) {
-                    this.createPlatform()
-                    globals.isPlatformHide = true
+                const startPlatformRight = getStartPlatformX()
+                const startPlatformLeft = getStartPlatformX(true)
+
+                const isStartPlatformHide = startPlatformRight <= ScreenParams.left && !globals.isPlatformHide
+                const isStartPlatformTouchLeftSide = startPlatformLeft <= ScreenParams.left && globals.isPlatformHide
+
+                if(isStartPlatformHide) {
+                    this.handleReplacePlatforms()
                 }
-                else if(currentPlatformLeft <= ScreenParams.left && globals.isPlatformHide){
-                    globals.isPlatformHide = false
-                    globals.whatMoving = COMPONENT.STICK
+                if(isStartPlatformTouchLeftSide){
+                    this.handleStopPlatforms()
                 }
                 break
             case COMPONENT.STICK: 
-                globals.platformX = this.platformTo.node.x + this.platformTo.node.width / 2 - 67
+                const endPlatformRight = this.platformEnd.node.x + this.platformEnd.node.width / 2
+                EventDispatcher.emit(EVENT.PLATFORM_STOP, endPlatformRight);
                 break
-
         }
-        
     }
+
+    handleReplacePlatforms(){
+        this.updatePlatforms()
+        globals.isPlatformHide = true
+    }
+
+    handleStopPlatforms(){
+        globals.isPlatformHide = false
+        globals.whatMoving = COMPONENT.STICK
+    }
+
+
 }

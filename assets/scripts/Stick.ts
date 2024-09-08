@@ -73,7 +73,8 @@ export default class StickController extends cc.Component {
     }
 
     handleStick(dt){
-        if(this.isTouching && this.isGrowing && !this.rotationAngle) {
+        const isStickGrowing = this.isTouching && this.isGrowing && !this.rotationAngle
+        if(isStickGrowing) {
             this.growStick(dt)
         }
         else if(this.wasTouched){
