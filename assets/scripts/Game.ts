@@ -22,14 +22,14 @@ export default class GameController extends cc.Component {
     }
 
     init(){
+        this.handleManagar()
+        this.handleTouch()
+
         // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
         //     cc.PhysicsManager.DrawBits.e_pairBit |
         //     cc.PhysicsManager.DrawBits.e_centerOfMassBit |
         //     cc.PhysicsManager.DrawBits.e_joinBit |
         //     cc.PhysicsManager.DrawBits.e_shapeBit;
-
-        this.handleManagar()
-        this.handleTouch()
     }
 
     handleManagar(){

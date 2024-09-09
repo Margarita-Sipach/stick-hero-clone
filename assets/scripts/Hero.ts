@@ -20,7 +20,7 @@ export default class HeroController extends cc.Component {
     boxColliderInit(){
         const collider = this.node.getComponent(cc.PhysicsBoxCollider);
         collider.size.width = 1;
-        collider.offset.x = collider.offset.x + this.node.width / 2
+        collider.offset.x = collider.offset.x + this.node.width * this.node.scale
         collider.apply();
     }
 
@@ -35,13 +35,13 @@ export default class HeroController extends cc.Component {
     update (dt) {
         switch(globals.whatMoving){
             case COMPONENT.HERO:
-                this.node.x += SPEED.FAST * dt;
+                this.node.x += SPEED.MIDDLE * dt;
                 
                 const isHeroCame = !this.isContactStick && this.node.x >= this.endPlatformRight - this.node.width * this.node.scale
                 if(isHeroCame) EventDispatcher.emit(EVENT.HERO_CAME)
                 break;
             case COMPONENT.PLATFORMS:
-                this.node.x -= SPEED.SLOW * dt
+                this.node.x -= SPEED.MIDDLE * dt
                 break;
         }
         const isHeroFell = this.node.y < this.startY / 2 + ScreenParams.bottom

@@ -25,6 +25,7 @@ export enum COMPONENT{
 
 export enum SPEED{
     SLOW = 100,
+    MIDDLE = 500,
     FAST = 1000
 }
 

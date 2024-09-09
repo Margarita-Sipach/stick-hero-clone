@@ -18,7 +18,7 @@ export default class PlatformController extends cc.Component {
     }
 
     start () {
-        if(this.status === PLATFORM_STATUS.START) this.deleteLabel()
+        if(this.status === PLATFORM_STATUS.START) this.deactivateLabel()
         this.createStick()
     }
 
@@ -29,7 +29,6 @@ export default class PlatformController extends cc.Component {
         const collider = this.node.getComponent(cc.PhysicsBoxCollider);
         collider.size.width = this.node.width;
         collider.size.height = this.node.height;
-
         collider.apply();
     }
  
@@ -42,13 +41,18 @@ export default class PlatformController extends cc.Component {
 
     heroCame(){
         if(this.status === PLATFORM_STATUS.END) {
-            this.deleteLabel()  
+            this.deactivateLabel()  
         }
     }
 
-    deleteLabel(){
+    deactivateLabel(){
         const label = this.node.getChildByName(COMPONENT.LABEL)
-        this.node.removeChild(label)
+        label.active = false
+    }
+
+    activateLabel(){
+        const label = this.node.getChildByName(COMPONENT.LABEL)
+        label.active = true
     }
 
     update (dt) {
@@ -56,7 +60,7 @@ export default class PlatformController extends cc.Component {
 
         switch(globals.whatMoving){
             case COMPONENT.PLATFORMS:
-                this.node.x -= SPEED.SLOW * dt
+                this.node.x -= SPEED.MIDDLE * dt
                 const isStickMoving = this.node.x <= ScreenParams.left && this.status === PLATFORM_STATUS.START && globals.isPlatformHide
                 
                 if(isStickMoving){
@@ -65,6 +69,9 @@ export default class PlatformController extends cc.Component {
                 if(this.status === PLATFORM_STATUS.END){
                     this.currentStick.reset()
                 }
+                if(this.status === PLATFORM_STATUS.HIDDEN){
+                    this.activateLabel()
+                }      
         }
     }
 }

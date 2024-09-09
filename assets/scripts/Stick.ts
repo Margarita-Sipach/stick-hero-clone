@@ -52,7 +52,7 @@ export default class StickController extends cc.Component {
     update (dt) {
         switch(globals.whatMoving){
             case COMPONENT.PLATFORMS:
-                this.node.x -= SPEED.SLOW * dt
+                this.node.x -= SPEED.MIDDLE * dt
                 break;
             case COMPONENT.STICK: 
                 this.handleStick(dt)
@@ -83,7 +83,7 @@ export default class StickController extends cc.Component {
     }
 
     growStick(dt){
-        this.stickHeight += SPEED.SLOW * dt;
+        this.stickHeight += SPEED.MIDDLE * dt;
         this.node.height = this.stickHeight
         this.wasTouched = true
     }
